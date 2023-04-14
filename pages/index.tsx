@@ -9,8 +9,8 @@ type MockWalletAdaptor = {
   installUrl: string;
 };
 
-type WalletAdapters = ReturnType<typeof useWalletKit>["wallets"];
-type KitWalletAdapter = WalletAdapters extends Array<infer U> ? U : never;
+type KitWalletAdapters = ReturnType<typeof useWalletKit>["wallets"];
+type KitWalletAdapter = KitWalletAdapters extends Array<infer U> ? U : never;
 
 const defaultWallets = [
   {
