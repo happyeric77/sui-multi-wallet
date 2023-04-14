@@ -1,5 +1,4 @@
 import { PropsWithChildren } from "react";
-
 import { WalletKitProvider } from "@mysten/wallet-kit";
 
 export const SuiWalletContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
@@ -9,9 +8,5 @@ export const SuiWalletContextProvider: React.FC<PropsWithChildren> = ({ children
   //   ],
   //   [],
   // );
-  return (
-    <>
-      <WalletKitProvider /*adapters={adapters as any}*/>{children}</WalletKitProvider>
-    </>
-  );
+  return <WalletKitProvider /*adapters={adapters as any}*/>{children}</WalletKitProvider>;
 };
