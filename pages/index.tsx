@@ -1,13 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { ConnectButton, ConnectModal, useWalletKit } from "@mysten/wallet-kit";
-type MockWallet = {
+
+type WalletAdapter = MockWalletAdaptor | KitWalletAdapter;
+
+type MockWalletAdaptor = {
   name: string;
   icon: string;
   installUrl: string;
 };
 
 type WalletAdapters = ReturnType<typeof useWalletKit>["wallets"];
-type WalletAdapter = WalletAdapters extends Array<infer U> ? U : never;
+type KitWalletAdapter = WalletAdapters extends Array<infer U> ? U : never;
 
 const defaultWallets = [
   {
@@ -30,7 +33,7 @@ const defaultWallets = [
 const Home: React.FC = () => {
   const { currentAccount, disconnect, wallets: walletsFromKit, connect, isError, isConnected } = useWalletKit();
 
-  const wallets: (WalletAdapter | MockWallet)[] = useMemo(() => {
+  const wallets: WalletAdapter[] = useMemo(() => {
     if (walletsFromKit.length > 0) {
       const walletsFromKitNames = walletsFromKit.map((wallet) => wallet.name);
       const notInWallets = defaultWallets.filter((wallet) => !walletsFromKitNames.includes(wallet.name));
@@ -39,8 +42,8 @@ const Home: React.FC = () => {
     return defaultWallets;
   }, [walletsFromKit]);
 
-  const walletAdapterValidator = (wallet: WalletAdapter | MockWallet): wallet is WalletAdapter => {
-    return (wallet as MockWallet).installUrl === undefined;
+  const walletAdapterValidator = (wallet: WalletAdapter): wallet is WalletAdapter => {
+    return (wallet as MockWalletAdaptor).installUrl === undefined;
   };
 
   return (
